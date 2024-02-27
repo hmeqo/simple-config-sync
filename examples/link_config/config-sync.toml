@@ -4,11 +4,10 @@ links = [{ source = "dotfiles/a", target = "config/a" }]
 
 [options.b]
 description = "B config file."
-links = [{ source = "dotfiles/b", target = "config/b" }]
-
-[options.c]
-description = "C config file."
-links = [{ source = "dotfiles/c", target = "config/c" }]
+links = [
+    { source = "dotfiles/b", target = "config/b" },
+    { source = "dotfiles/c", target = "config/c" },
+]
 
 [options.d]
 description = "D config file."
