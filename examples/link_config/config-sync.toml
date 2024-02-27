@@ -1,0 +1,15 @@
+[options.a]
+description = "A config file."
+links = [{ source = "dotfiles/a", target = "config/a" }]
+
+[options.b]
+description = "B config file."
+links = [{ source = "dotfiles/b", target = "config/b" }]
+
+[options.c]
+description = "C config file."
+links = [{ source = "dotfiles/c", target = "config/c" }]
+
+[options.d]
+description = "D config file."
+links = [{ source = "dotfiles/d", target = "config/d" }]
