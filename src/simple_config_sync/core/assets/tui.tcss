@@ -1,0 +1,98 @@
+MainScreen {
+    layout: grid;
+    grid-size: 2;
+    grid-columns: 1fr 24;
+    width: 1fr;
+    height: 1fr;
+}
+
+Panel {
+    padding: 0 1;
+    background: #282828;
+}
+
+Panel > * {
+    width: 1fr;
+    margin-bottom: 1;
+}
+
+Option {
+    layout: grid;
+    grid-size: 2;
+    grid-gutter: 2;
+    grid-columns: 16 1fr;
+    margin: 1;
+    width: 1fr;
+    height: auto;
+}
+
+Option #sync {
+    width: 1fr;
+}
+
+Option #content {
+    width: 1fr;
+    height: auto;
+}
+
+Option #info {
+    layout: horizontal;
+    width: 1fr;
+    height: auto;
+}
+
+Option #info > * {
+    margin-right: 2;
+    width: auto;
+    height: auto;
+}
+
+Option #info #name {
+    text-style: bold;
+}
+
+Option #info #status {
+    text-style: bold;
+}
+
+Option #info #status.added {
+    color: #0f0;
+}
+
+Option #info #status.modified {
+    color: #ff0;
+}
+
+Option #info #status.deleted {
+    color: #f00;
+}
+
+Option #links {
+    width: 1fr;
+    height: auto;
+}
+
+Link {
+    height: auto;
+}
+
+Link > * {
+    width: auto;
+    margin-right: 2;
+}
+
+.text-primary {
+    color: #00f;
+}
+
+.text-success {
+    color: #0f0;
+}
+
+.text-warning {
+    color: #ff0;
+}
+
+.bg-success {
+    background: #0f0;
+}
