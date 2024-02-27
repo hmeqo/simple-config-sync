@@ -40,7 +40,7 @@ class Option(Container):
                 yield Static(self.op.status, id='status', classes=self.op.status)
             with Container(id='links'):
                 for link in self.op.links:
-                    yield Link(link, id='link')
+                    yield Link(link)
 
     @on(Checkbox.Changed, '#sync')
     def on_check_changed(self, event: Checkbox.Changed) -> None:
@@ -91,6 +91,10 @@ class MainScreen(Container):
 
 class SimpleConfigSyncApp(App):
     CSS_PATH = 'assets/tui.tcss'
+
+    BINDINGS = [
+        ('q', 'quit', 'Quit'),
+    ]
 
     def compose(self) -> ComposeResult:
         yield Header()

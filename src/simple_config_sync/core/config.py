@@ -49,10 +49,10 @@ class Link(dict):
         source = Path(os.path.expandvars(self.source)).expanduser().absolute()
         target = Path(os.path.expandvars(self.target)).expanduser().absolute()
         if target.exists():
-            if target.is_dir():
-                shutil.rmtree(target)
-            else:
+            if target.is_file():
                 target.unlink()
+            else:
+                shutil.rmtree(target)
         target.parent.mkdir(parents=True, exist_ok=True)
         target.symlink_to(source, source.is_dir())
 
@@ -158,6 +158,12 @@ class SyncOp(Option):
         self.status = 'deleted'
         for link in self.lock_op.links:
             link.uninstall()
+
+    def sync(self):
+        if self.status == 'deleted' or not self.synced:
+            self.uninstall()
+        else:
+            self.install()
 
     @property
     def status(self) -> Status:
