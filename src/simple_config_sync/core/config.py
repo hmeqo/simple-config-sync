@@ -46,47 +46,47 @@ class Link(dict):
     def install(self):
         if self.linked:
             return
-        source = Path(os.path.expandvars(self.source)).expanduser().absolute()
-        target = Path(os.path.expandvars(self.target)).expanduser().absolute()
-        if target.exists():
-            if target.is_file():
-                target.unlink()
-            else:
-                shutil.rmtree(target)
+        source = self.source
+        target = self.target
+        if target.is_symlink() or target.is_file():
+            target.unlink()
+        elif target.is_dir():
+            shutil.rmtree(target)
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.symlink_to(source, source.is_dir())
+        target.symlink_to(source.absolute(), source.is_dir())
 
     def uninstall(self):
-        target = Path(self.target)
+        target = self.target
         if target.exists() and target.is_symlink():
             target.unlink()
 
     @property
-    def source(self) -> str:
-        return self.get('source', '')
+    def source(self) -> Path:
+        return Path(os.path.expandvars(self.get('source', ''))).expanduser()
 
     @source.setter
-    def source(self, value: str):
-        self['source'] = value
+    def source(self, value: Path | str):
+        self['source'] = str(value)
 
     @property
-    def target(self) -> str:
-        return self.get('target', '')
+    def target(self) -> Path:
+        return Path(os.path.expandvars(self.get('target', ''))).expanduser()
 
     @target.setter
-    def target(self, value: str):
-        self['target'] = value
+    def target(self, value: Path | str):
+        self['target'] = str(value)
 
     @property
     def target_exists(self) -> bool:
-        return Path(self.target).exists()
+        target = self.target
+        return target.exists() or target.is_symlink()
 
     @property
     def linked(self) -> bool:
-        target = Path(self.target)
-        if not target.exists() or not target.is_symlink():
+        target = self.target
+        if not target.is_symlink():
             return False
-        return Path(os.path.expandvars(self.source)).expanduser().absolute() == target.readlink()
+        return target.readlink() == self.source.absolute()
 
 
 class Option:
@@ -149,8 +149,6 @@ class SyncOp(Option):
         return deepcopy(self.op.d)
 
     def install(self):
-        for link in self.lock_op.links:
-            link.uninstall()
         for link in self.links:
             link.install()
 
