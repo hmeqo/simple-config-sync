@@ -19,7 +19,7 @@ Panel > * {
 Option {
     layout: grid;
     grid-size: 2;
-    grid-gutter: 2;
+    grid-gutter: 1;
     grid-columns: 16 1fr;
     margin: 1;
     width: 1fr;
@@ -51,10 +51,6 @@ Option #info #name {
     text-style: bold;
 }
 
-Option #info #status {
-    text-style: bold;
-}
-
 Option #info #status.added {
     color: #0f0;
 }
@@ -79,6 +75,10 @@ Link {
 Link > * {
     width: auto;
     margin-right: 2;
+}
+
+Link .hint {
+    text-style: bold;
 }
 
 .text-primary {

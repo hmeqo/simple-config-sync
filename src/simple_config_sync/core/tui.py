@@ -15,9 +15,9 @@ class Link(Horizontal):
     def compose(self) -> ComposeResult:
         yield Static(f'{self.link.source} -> {self.link.target}')
         if self.link.linked:
-            yield Static('Linked', classes='text-success')
+            yield Static('Linked', classes='hint text-success')
         elif self.link.target_exists:
-            yield Static('Target is exists, will override.', classes='text-warning')
+            yield Static('Target is exists, will override.', classes='hint text-warning')
 
 
 class Option(Container):
