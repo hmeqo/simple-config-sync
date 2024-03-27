@@ -103,20 +103,16 @@ class Option:
         return bool(self.d)
 
     @property
+    def group(self) -> str:
+        return self.d.get('group', '')
+
+    @property
     def description(self) -> str:
         return self.d.get('description', '')
-
-    @description.setter
-    def description(self, value: str):
-        self.d['description'] = value
 
     @property
     def links(self) -> list[Link]:
         return [Link(i) for i in self.d.get('links', [])]
-
-    @links.setter
-    def links(self, value: list[dict]):
-        self.d['links'] = value
 
     @property
     def synced(self) -> bool:
@@ -130,9 +126,9 @@ class Option:
     def status(self) -> Status:
         return self.d.get('status', '')
 
-    @status.setter
-    def status(self, value: Status):
-        self.d['status'] = value
+    @property
+    def dependencies(self) -> list[str]:
+        return self.d.get('dependencies', [])
 
 
 class SyncOp(Option):
@@ -141,7 +137,7 @@ class SyncOp(Option):
         self.op = Option(op)
         self.lock_op = Option(lock_op)
         super().__init__(self.sync_lock())
-        self.synced = self.lock_op.synced
+        self.synced = self.lock_op.synced if self.lock_op else self.op.synced
 
     def sync_lock(self):
         if self.status == 'deleted':

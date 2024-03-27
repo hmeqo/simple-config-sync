@@ -36,6 +36,8 @@ class Option(Container):
         with Container(id='content'):
             with Container(id='info'):
                 yield Static(self.key, id='name', classes='text-primary')
+                if self.op.group:
+                    yield Static(f'({self.op.group})', id='group', classes='text-red')
                 yield Static(self.op.description, id='description')
                 yield Static(self.op.status, id='status', classes=self.op.status)
             with Container(id='links'):

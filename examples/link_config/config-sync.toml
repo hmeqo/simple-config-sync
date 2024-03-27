@@ -1,4 +1,5 @@
 [options.a]
+group = "default group"
 description = "A config file."
 links = [{ source = "dotfiles/a", target = "config/a" }]
 
@@ -12,3 +13,4 @@ links = [
 [options.d]
 description = "D config file."
 links = [{ source = "dotfiles/d", target = "config/d" }]
+synced = false
