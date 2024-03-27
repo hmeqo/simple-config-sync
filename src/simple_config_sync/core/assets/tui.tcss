@@ -81,16 +81,24 @@ Link .hint {
     text-style: bold;
 }
 
+.text-blue,
 .text-primary {
     color: #00f;
 }
 
+.text-green,
 .text-success {
     color: #0f0;
 }
 
+.text-yellow,
 .text-warning {
     color: #ff0;
+}
+
+.text-red,
+.text-error {
+    color: #f00;
 }
 
 .bg-success {
