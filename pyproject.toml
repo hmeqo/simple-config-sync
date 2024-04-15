@@ -1,30 +1,26 @@
 [project]
 name = "simple-config-sync"
-version = "0.1.5"
+version = "0.1.6"
 description = "Used for synchronizing dotfiles across various Linux devices, capable of automatically creating links, automatically deleting links, and selectively synchronizing files."
 authors = []
-dependencies = ["textual>=0.52.1", "toml>=0.10.2"]
+dependencies = ["textual>=0.52.1", "toml>=0.10.2", "click>=8.1.7"]
 requires-python = ">=3.11"
 readme = "README.md"
 license = { text = "MIT" }
 
 [project.scripts]
-scstui = "simple_config_sync.core:run_tui"
-
+simpleconfigsync = "simple_config_sync.core:run_cli"
+simpleconfigsync-tui = "simple_config_sync.core:run_tui"
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
-
-
-[tool.pdm]
-distribution = true
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 line-length = 120
 
 [tool.ruff.lint]
-ignore = ["F403", "F405"]
+ignore = ["F401", "F403", "F405"]
 
 [tool.ruff.format]
-quote-style = "single"
+quote-style = "double"
