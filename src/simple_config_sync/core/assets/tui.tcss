@@ -51,6 +51,10 @@ Option #info #name {
     text-style: bold;
 }
 
+Option #info #status {
+    text-style: bold;
+}
+
 Option #info #status.added {
     color: #0f0;
 }
@@ -63,7 +67,13 @@ Option #info #status.deleted {
     color: #f00;
 }
 
+Option #depends {
+    width: 1fr;
+    height: auto;
+}
+
 Option #links {
+    margin-top: 1;
     width: 1fr;
     height: auto;
 }
