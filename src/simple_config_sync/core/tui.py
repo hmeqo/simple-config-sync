@@ -73,16 +73,16 @@ class Panel(Container):
         yield Button("Read config", "primary", id="read-config")
 
     @on(Button.Pressed, "#sync")
-    def on_sync(self, event: Button.Pressed):
-        getattr(self.app, "action_sync")()
+    async def on_sync(self, event: Button.Pressed):
+        await self.app.run_action("sync")
 
     @on(Button.Pressed, "#uninstall")
-    def on_uninstall(self, event: Button.Pressed):
-        getattr(self.app, "uninstall")()
+    async def on_uninstall(self, event: Button.Pressed):
+        await self.app.run_action("uninstall")
 
     @on(Button.Pressed, "#read-config")
-    def on_read_config(self, event: Button.Pressed):
-        getattr(self.app, "read_config")()
+    async def on_read_config(self, event: Button.Pressed):
+        await self.app.run_action("read_config")
 
 
 class MainScreen(Container):

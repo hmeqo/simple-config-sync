@@ -170,7 +170,9 @@ class Config:
             toml.dump({"option": [i.d for i in self.opts if i.op]}, f)
 
     def sync(self) -> None:
-        for op in self.opts:
+        for op in filter(lambda x: x.status == "deleted", self.opts):
+            op.sync()
+        for op in filter(lambda x: x.status != "deleted", self.opts):
             op.sync()
         self.lock()
         self.load()
