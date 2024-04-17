@@ -1,21 +1,17 @@
-[[option]]
-name = "a"
+[options.a]
 group = "default group"
 description = "A config file."
 links = [{ source = "./dotfiles/a", target = "config/a" }]
 depends = { system = ["neovim"] }
 
-[[option]]
-name = "b"
+[options.b]
 description = "B config file."
 links = [{ source = "./dotfiles/b", target = "config/b" }]
 
-[[option]]
-name = "c"
+[options.c]
 description = ""
 links = [{ source = "./dotfiles/c", target = "config/c" }]
 
-[[option]]
-name = "d"
+[options.d]
 description = ""
 links = [{ source = "./dotfiles/d", target = "config/d" }]
