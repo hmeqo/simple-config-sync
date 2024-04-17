@@ -3,24 +3,35 @@ import shutil
 from copy import deepcopy
 from functools import cached_property
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Protocol
 
 import toml
 
 Status = Literal["added", "modified", "deleted", ""]
 
 
-class Link:
+class OptionProtocol(Protocol):
+    def sync(self) -> None: ...
+    def uninstall(self, clean: bool = False) -> None: ...
+
+
+class Link(OptionProtocol):
     def __init__(self, d: dict) -> None:
         self.d = d
 
     def __eq__(self, value: "Option") -> bool:
         return self.d == value.d
 
+    def sync(self):
+        if not self.source.exists():
+            raise FileNotFoundError(f"Source file not found: {self.source}")
+        if self.target.exists():
+            self.clean_target()
+        self.target.parent.mkdir(parents=True, exist_ok=True)
+        self.target.symlink_to(self.source.resolve(), self.source.is_dir())
+
     def uninstall(self) -> None:
-        if not self.target.exists():
-            return
-        if self.target.is_symlink():
+        if self.linked:
             self.target.unlink()
 
     def clean_target(self) -> None:
@@ -30,13 +41,6 @@ class Link:
             self.target.unlink()
         else:
             shutil.rmtree(self.target)
-
-    def sync(self):
-        if not self.source.exists():
-            raise FileNotFoundError(f"Source file not found: {self.source}")
-        if self.target.exists():
-            self.clean_target()
-        self.target.symlink_to(self.source.resolve(), self.source.is_dir())
 
     @property
     def linked(self) -> bool:
@@ -53,8 +57,9 @@ class Link:
         return Path(os.path.expandvars(self.d.get("target", ""))).expanduser()
 
 
-class Option:
-    def __init__(self, d: dict | None) -> None:
+class Option(OptionProtocol):
+    def __init__(self, name: str, d: dict | None) -> None:
+        self.name = name
         self.d = d or {}
 
     def __repr__(self) -> str:
@@ -66,9 +71,16 @@ class Option:
     def __bool__(self) -> bool:
         return bool(self.d)
 
-    @property
-    def name(self) -> str:
-        return self.d.get("name", "")
+    def __eq__(self, value: "Option") -> bool:
+        return self.name == value.name
+
+    def sync(self) -> None:
+        for link in self.links:
+            link.sync()
+
+    def uninstall(self, clean: bool = False) -> None:
+        for link in self.links:
+            link.uninstall()
 
     @property
     def description(self) -> str:
@@ -95,32 +107,29 @@ class Option:
         return self.d.get("status", "")
 
 
-class SyncOp(Option):
-    def __init__(self, op: dict | None = None, lock_op: dict | None = None):
+class SyncOp(Option, OptionProtocol):
+    def __init__(self, name: str, op: dict | None = None, lock_op: dict | None = None):
         assert op or lock_op
-        self.op = Option(op)
-        self.lock_op = Option(lock_op)
-        super().__init__(self._sync_op())
+        self.op = Option(name, op)
+        self.lock_op = Option(name, lock_op)
+        super().__init__(name, self._sync_op())
 
-    def _sync_op(self):
+    def _sync_op(self) -> dict:
         synced = self.op and (self.lock_op and self.lock_op.synced)
         if self.status == "deleted":
             return deepcopy(self.lock_op.d) | {"synced": synced}
         return deepcopy(self.op.d) | {"synced": synced}
 
-    def sync(self):
+    def sync(self) -> None:
         if not self.synced:
             self.uninstall()
             return
-        for link in self.lock_op.links:
-            link.uninstall()
-        for link in self.op.links:
-            link.sync()
+        self.lock_op.uninstall()
+        self.op.sync()
         self.synced = True
 
-    def uninstall(self):
-        for link in self.lock_op.links:
-            link.uninstall()
+    def uninstall(self, clean: bool = False) -> None:
+        self.lock_op.uninstall(clean=clean)
         self.synced = False
 
     @property
@@ -142,32 +151,29 @@ class Config:
     def __init__(self) -> None:
         self.path = Path("config-sync.toml")
         self.lock_path = Path("config-sync.lock")
-        self._opts: list[Option] = []
-        self._lock_opts: list[Option] = []
+        self.opt_names: list[str] = []
+        self.lock_opt_names: list[str] = []
         self.opts: list[SyncOp] = []
 
     def load(self) -> None:
         with open(self.path) as f:
-            d = toml.load(f) or {}
-            opts = {i.get("name", ""): i for i in d.get("option", [])}
+            d = toml.load(f)
+            opts: dict = d.get("options", {})
         if self.lock_path.exists():
             with open(self.lock_path) as f:
-                lock_d = toml.load(f) or {}
-            lock_opts = {i.get("name", ""): i for i in lock_d.get("option", [])}
+                lock_d = toml.load(f)
+            lock_opts: dict = lock_d.get("options", {})
         else:
             lock_opts = {}
+        self.opt_names = list(opts.keys())
+        self.lock_opt_names = list(lock_opts.keys())
         self.opts.clear()
-        sync_opts = []
-        for i in opts:
-            sync_opts.append(SyncOp(opts[i], lock_opts.get(i)))
-        for i in lock_opts:
-            if i not in opts:
-                sync_opts.append(SyncOp(None, lock_opts[i]))
-        self.opts.extend(sync_opts)
+        self.opts.extend(SyncOp(i, opts[i], lock_opts.get(i)) for i in opts)
+        self.opts.extend(SyncOp(i, None, lock_opts[i]) for i in lock_opts if i not in opts)
 
     def lock(self) -> None:
         with open(self.lock_path, "w") as f:
-            toml.dump({"option": [i.d for i in self.opts if i.op]}, f)
+            toml.dump({"options": {i.name: i.d for i in self.opts if i.op}}, f)
 
     def sync(self) -> None:
         for op in filter(lambda x: x.status == "deleted", self.opts):
@@ -179,6 +185,8 @@ class Config:
 
     def uninstall(self) -> None:
         for op in self.opts:
+            if op.name not in self.lock_opt_names:
+                continue
             op.uninstall()
         self.lock()
         self.load()
