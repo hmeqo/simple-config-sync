@@ -66,7 +66,7 @@ class Option(OptionProtocol):
         return self.__str__()
 
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}({self.description})"
+        return f"{self.__class__.__name__}({self.name})"
 
     def __bool__(self) -> bool:
         return bool(self.d)
@@ -81,6 +81,10 @@ class Option(OptionProtocol):
     def uninstall(self, clean: bool = False) -> None:
         for link in self.links:
             link.uninstall()
+
+    @property
+    def group(self) -> str:
+        return self.d.get("group", "")
 
     @property
     def description(self) -> str:
@@ -115,7 +119,7 @@ class SyncOp(Option, OptionProtocol):
         super().__init__(name, self._sync_op())
 
     def _sync_op(self) -> dict:
-        synced = self.op and (self.lock_op and self.lock_op.synced)
+        synced: bool = bool(self.op and (self.lock_op and self.lock_op.synced))
         if self.status == "deleted":
             return deepcopy(self.lock_op.d) | {"synced": synced}
         return deepcopy(self.op.d) | {"synced": synced}

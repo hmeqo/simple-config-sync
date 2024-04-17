@@ -72,7 +72,7 @@ UOption #depends {
     height: auto;
 }
 
-UOption #links {
+ULinkList {
     width: 1fr;
     height: auto;
 }
