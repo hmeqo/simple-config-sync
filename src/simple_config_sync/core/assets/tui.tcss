@@ -16,7 +16,7 @@ Panel > * {
     margin-bottom: 1;
 }
 
-Option {
+UOption {
     layout: grid;
     grid-size: 2;
     grid-gutter: 1;
@@ -26,68 +26,68 @@ Option {
     height: auto;
 }
 
-Option #sync {
+UOption #sync {
     width: 1fr;
 }
 
-Option #content {
+UOption #content {
     width: 1fr;
     height: auto;
 }
 
-Option #info {
+UOption #info {
     layout: horizontal;
     width: 1fr;
     height: auto;
 }
 
-Option #info > * {
+UOption #info > * {
     margin-right: 2;
     width: auto;
     height: auto;
 }
 
-Option #info #name {
+UOption #info #name {
     text-style: bold;
 }
 
-Option #info #status {
+UOption #info #status {
     text-style: bold;
 }
 
-Option #info #status.added {
+UOption #info #status.added {
     color: #0f0;
 }
 
-Option #info #status.modified {
+UOption #info #status.modified {
     color: #ff0;
 }
 
-Option #info #status.deleted {
+UOption #info #status.deleted {
     color: #f00;
 }
 
-Option #depends {
+UOption #depends {
     width: 1fr;
     height: auto;
 }
 
-Option #links {
-    margin-top: 1;
+UOption #links {
     width: 1fr;
     height: auto;
 }
 
-Link {
+ULink {
+    margin-left: 2;
     height: auto;
 }
 
-Link > * {
+ULink > * {
     width: auto;
     margin-right: 2;
 }
 
-Link .hint {
+ULink .status {
     text-style: bold;
 }
 
