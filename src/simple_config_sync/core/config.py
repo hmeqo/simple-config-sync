@@ -1,11 +1,12 @@
 import os
-import shutil
 from copy import deepcopy
 from functools import cached_property
 from pathlib import Path
 from typing import Literal, Protocol
 
 import toml
+
+from .backup import backup, restore
 
 Status = Literal["added", "modified", "deleted", ""]
 
@@ -33,14 +34,12 @@ class Link(OptionProtocol):
     def uninstall(self) -> None:
         if self.linked:
             self.target.unlink()
+        restore(self.target)
 
     def clean_target(self) -> None:
         if not self.target.exists():
             return
-        if self.target.is_symlink() or self.target.is_file():
-            self.target.unlink()
-        else:
-            shutil.rmtree(self.target)
+        backup(self.target)
 
     @property
     def linked(self) -> bool:

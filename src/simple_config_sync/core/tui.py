@@ -19,8 +19,8 @@ class ULink(Horizontal):
         yield Static(f"{self.link.source} -> {self.link.target}")
         if (self.op.synced or self.op.lock_op.synced) and self.link.linked:
             yield Static("Linked", classes="hint text-success")
-        elif self.op.synced and self.link.target.exists():
-            yield Static("Target is exists, will override.", classes="status text-warning")
+        elif self.op.synced and not self.link.linked and self.link.target.exists():
+            yield Static("Target is exists, will be backup.", classes="status text-warning")
 
 
 class ULinkList(Container):
@@ -80,8 +80,7 @@ class UOptionList(VerticalScroll):
                 break
         else:
             index = 0
-        if index >= len(config.opts):
-            index -= len(config.opts)
+        index = max(min(index, len(checkboxes) - 1), 0)
         checkboxes[index].focus()
 
     def focus_down(self):

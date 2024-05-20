@@ -21,6 +21,8 @@ mdit-py-plugins==0.4.0
     # via markdown-it-py
 mdurl==0.1.2
     # via markdown-it-py
+mmh3==4.1.0
+    # via simple-config-sync
 pygments==2.17.2
     # via rich
 rich==13.7.1

@@ -2,7 +2,7 @@
 group = "default group"
 description = "A config file."
 links = [{ source = "./dotfiles/a", target = "config/a" }]
-depends = { system = ["neovim"] }
+depends = { system = ["neovim"], group = ["b"] }
 
 [options.b]
 description = "B config file."
