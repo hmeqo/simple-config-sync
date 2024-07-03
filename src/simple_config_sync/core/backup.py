@@ -10,16 +10,18 @@ if not BACKUP_DIR.exists():
 
 
 def to_backup_path(fp: Path) -> Path:
-    return (
-        BACKUP_DIR
-        / f"{fp.name}-{mmh3.hash64(str(fp.absolute().relative_to(Path('~').expanduser())), signed=False)[0]:x}"
-    )
+    hash_num = mmh3.hash64(str(fp.absolute().relative_to(Path("~").expanduser())), signed=False)[0]
+    return BACKUP_DIR / f"{fp.name}-{hash_num:x}"
 
 
 def backup(fp: Path) -> None:
-    if not fp.exists():
-        return
-    shutil.move(fp, to_backup_path(fp))
+    backup_path = to_backup_path(fp)
+    if backup_path.exists():
+        if backup_path.is_dir():
+            shutil.rmtree(backup_path)
+        else:
+            backup_path.unlink()
+    shutil.move(fp, backup_path)
 
 
 def restore(fp: Path) -> None:

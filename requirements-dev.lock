@@ -6,6 +6,7 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
 click==8.1.7
@@ -13,25 +14,24 @@ click==8.1.7
 linkify-it-py==2.0.3
     # via markdown-it-py
 markdown-it-py==3.0.0
-    # via markdown-it-py
     # via mdit-py-plugins
     # via rich
     # via textual
-mdit-py-plugins==0.4.0
+mdit-py-plugins==0.4.1
     # via markdown-it-py
 mdurl==0.1.2
     # via markdown-it-py
 mmh3==4.1.0
     # via simple-config-sync
-pygments==2.17.2
+pygments==2.18.0
     # via rich
 rich==13.7.1
     # via textual
-textual==0.56.4
+textual==0.71.0
     # via simple-config-sync
 toml==0.10.2
     # via simple-config-sync
-typing-extensions==4.11.0
+typing-extensions==4.12.2
     # via textual
 uc-micro-py==1.0.3
     # via linkify-it-py

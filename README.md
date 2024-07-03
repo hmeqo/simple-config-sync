@@ -11,10 +11,18 @@ pip install simple-config-sync
 pip install --user simple-config-sync
 ```
 
+## Configuration
+
+Generate a `config-sync.toml` file.
+
+```shell
+simpleconfigsync init
+```
+
 ## Usage
 
 Run the tui program.
 
 ```shell
-simpleconfigsync-tui
+simpleconfigsync tui
 ```

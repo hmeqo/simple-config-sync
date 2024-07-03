@@ -72,22 +72,27 @@ class UOptionList(VerticalScroll):
         await asyncio.sleep(0.1)
         self.loading = False
 
-    def focus_option(self, offset: int):
+    def focus_index(self):
         checkboxes = self.query(Checkbox)
         for index, i in enumerate(checkboxes):
             if i.has_focus:
-                index = index + offset
-                break
-        else:
+                return index
+
+    def focus_offset(self, offset: int):
+        checkboxes = self.query(Checkbox)
+        index = self.focus_index()
+        if index is None:
             index = 0
+        else:
+            index += offset
         index = max(min(index, len(checkboxes) - 1), 0)
         checkboxes[index].focus()
 
     def focus_down(self):
-        self.focus_option(1)
+        self.focus_offset(1)
 
     def focus_up(self):
-        self.focus_option(-1)
+        self.focus_offset(-1)
 
 
 class Panel(VerticalScroll):
