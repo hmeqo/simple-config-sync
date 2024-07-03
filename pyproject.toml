@@ -1,6 +1,6 @@
 [project]
 name = "simple-config-sync"
-version = "0.1.15"
+version = "0.1.16"
 description = "This tool is used to synchronize dotfiles across various Linux devices, with capabilities to automatically create and delete links, as well as selectively synchronize files."
 authors = []
 dependencies = [
