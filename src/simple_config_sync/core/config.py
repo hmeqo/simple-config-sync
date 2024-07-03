@@ -50,11 +50,11 @@ class Link(OptionProtocol):
 
     @cached_property
     def source(self) -> Path:
-        return Path(os.path.expandvars(self.d.get("source", "")))
+        return Path(os.path.expandvars(self.d.get("source", ""))).expanduser()
 
     @cached_property
     def target(self) -> Path:
-        return Path(os.path.expandvars(self.d.get("target", "")))
+        return Path(os.path.expandvars(self.d.get("target", ""))).expanduser()
 
 
 class Option(OptionProtocol):
