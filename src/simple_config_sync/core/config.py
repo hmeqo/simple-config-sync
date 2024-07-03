@@ -31,8 +31,9 @@ class Link(OptionProtocol):
         self.target.symlink_to(self.source.resolve(), self.source.is_dir())
 
     def uninstall(self) -> None:
-        if self.linked:
-            self.target.unlink()
+        if not self.linked:
+            return
+        self.target.unlink()
         restore(self.target)
 
     def clean_target(self):
