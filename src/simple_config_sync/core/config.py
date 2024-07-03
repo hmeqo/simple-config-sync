@@ -26,8 +26,7 @@ class Link(OptionProtocol):
     def sync(self):
         if not self.source.exists():
             raise FileNotFoundError(f"Source file not found: {self.source}")
-        if self.target.exists():
-            self.clean_target()
+        self.clean_target()
         self.target.parent.mkdir(parents=True, exist_ok=True)
         self.target.symlink_to(self.source.resolve(), self.source.is_dir())
 
@@ -36,24 +35,26 @@ class Link(OptionProtocol):
             self.target.unlink()
         restore(self.target)
 
-    def clean_target(self) -> None:
+    def clean_target(self):
         if not self.target.exists():
+            if self.target.is_symlink():
+                self.target.unlink()
             return
         backup(self.target)
 
     @property
     def linked(self) -> bool:
-        if not self.target.exists() or not self.target.is_symlink():
+        if not (self.target.is_symlink() and self.target.exists()):
             return False
         return self.source.resolve() == self.target.readlink()
 
     @cached_property
     def source(self) -> Path:
-        return Path(os.path.expandvars(self.d.get("source", ""))).expanduser()
+        return Path(os.path.expandvars(self.d.get("source", "")))
 
     @cached_property
     def target(self) -> Path:
-        return Path(os.path.expandvars(self.d.get("target", ""))).expanduser()
+        return Path(os.path.expandvars(self.d.get("target", "")))
 
 
 class Option(OptionProtocol):
@@ -77,7 +78,7 @@ class Option(OptionProtocol):
         for link in self.links:
             link.sync()
 
-    def uninstall(self, clean: bool = False) -> None:
+    def uninstall(self) -> None:
         for link in self.links:
             link.uninstall()
 
@@ -131,8 +132,8 @@ class SyncOp(Option, OptionProtocol):
         self.op.sync()
         self.synced = True
 
-    def uninstall(self, clean: bool = False) -> None:
-        self.lock_op.uninstall(clean=clean)
+    def uninstall(self) -> None:
+        self.lock_op.uninstall()
         self.synced = False
 
     @property
