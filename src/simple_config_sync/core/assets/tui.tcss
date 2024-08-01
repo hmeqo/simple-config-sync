@@ -1,7 +1,7 @@
 MainScreen {
     layout: grid;
-    grid-size: 2;
-    grid-columns: 1fr 24;
+    # grid-size: 2;
+    # grid-columns: 1fr 24;
     width: 1fr;
     height: 1fr;
 }
@@ -42,7 +42,7 @@ UOption #info {
 }
 
 UOption #info > * {
-    margin-right: 2;
+    margin-right: 1;
     width: auto;
     height: auto;
 }
