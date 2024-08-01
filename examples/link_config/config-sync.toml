@@ -1,17 +1,17 @@
-[options.a]
-group = "default group"
-description = "A config file."
-links = [{ source = "./dotfiles/a", target = "config/a" }]
-depends = { system = ["neovim"], group = ["b"] }
+[options.neovim]
+tags = ["Editor"]
+links = [{ source = "dotfiles/a", target = "config/a" }]
+depends = { system = ["neovim"] }
 
-[options.b]
-description = "B config file."
-links = [{ source = "./dotfiles/b", target = "config/b" }]
+[options.neovide]
+description = "Gui for neovim."
+links = [{ source = "dotfiles/b", target = "config/b" }]
+depends = { system = ["neovide"], item = ["neovim"] }
 
 [options.c]
 description = ""
-links = [{ source = "./dotfiles/c", target = "config/c" }]
+links = [{ source = "dotfiles/c", target = "config/c" }]
 
 [options.d]
 description = ""
-links = [{ source = "./dotfiles/d", target = "config/d" }]
+links = [{ source = "dotfiles/d", target = "config/d" }]

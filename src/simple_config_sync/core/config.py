@@ -84,8 +84,8 @@ class Option(OptionProtocol):
             link.uninstall()
 
     @property
-    def group(self) -> str:
-        return self.d.get("group", "")
+    def tags(self) -> list[str]:
+        return self.d.get("tags", [])
 
     @property
     def description(self) -> str:

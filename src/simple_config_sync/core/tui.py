@@ -44,10 +44,10 @@ class UOption(Container):
         with Container(id="content"):
             with Container(id="info"):
                 yield Static(self.op.name, id="name", classes="text-primary")
-                if self.op.group:
-                    yield Static(f"({self.op.group})", id="group", classes="text-red")
-                yield Static(self.op.description, id="description")
+                if self.op.tags:
+                    yield Static(f"[{', '.join(self.op.tags)}]", id="tags", classes="text-blue")
                 yield Static(self.op.status, id="status", classes=self.op.status)
+            yield Static(self.op.description, id="description")
             with Container(id="depends"):
                 for i in self.op.depends:
                     depends = ", ".join(self.op.depends[i])
@@ -100,7 +100,6 @@ class Panel(VerticalScroll):
         yield Button("Sync", "success", id="sync")
         yield Button("Uninstall", "primary", id="uninstall")
         yield Button("Select All", "primary", id="select-all")
-        yield Button("Reload", "primary", id="reload")
 
     @on(Button.Pressed)
     async def on_btn_press(self, event: Button.Pressed):
@@ -110,20 +109,20 @@ class Panel(VerticalScroll):
 class MainScreen(Container):
     def compose(self) -> ComposeResult:
         yield UOptionList()
-        yield Panel()
+        # yield Panel()
 
 
 class SimpleConfigSyncApp(App):
     CSS_PATH = "assets/tui.tcss"
 
     BINDINGS = [
+        ("q", "quit", "Quit"),
         ("s", "sync", "Sync"),
         ("u", "uninstall", "Uninstall"),
         ("a", "select_all", "Select All"),
-        ("r", "reload", "Reload"),
-        ("q", "quit", "Quit"),
-        Binding("j", "focus_down", show=False),
-        Binding("k", "focus_up", show=False),
+        ("j", "focus_down", "Focus Down"),
+        ("k", "focus_up", "Focus Up"),
+        ("<space>", "", "Choose"),
     ]
 
     def compose(self) -> ComposeResult:
@@ -145,12 +144,11 @@ class SimpleConfigSyncApp(App):
             op.synced = not synced
         await self.query_one(UOptionList).update()
 
-    async def action_reload(self):
-        config.load()
-        await self.query_one(UOptionList).update()
-
     async def action_focus_down(self):
         self.query_one(UOptionList).focus_down()
 
     async def action_focus_up(self):
         self.query_one(UOptionList).focus_up()
+
+    # async def action_choose(self):
+    #     pass
