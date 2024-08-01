@@ -42,7 +42,7 @@ UOption #info {
 }
 
 UOption #info > * {
-    margin-right: 1;
+    margin-right: 2;
     width: auto;
     height: auto;
 }
@@ -109,6 +109,14 @@ ULink .status {
 .text-red,
 .text-error {
     color: #f00;
+}
+
+.text-sky {
+    color: #0ff;
+}
+
+.text-orange {
+    color: #fa0;
 }
 
 .bg-success {

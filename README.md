@@ -2,7 +2,7 @@ Used for synchronizing dotfiles across various Linux devices, capable of automat
 
 ## Preview
 
-![P](./assets/Screenshot_20240801_232354.png)
+![Preview](./assets/preview.png)
 
 ## Install
 

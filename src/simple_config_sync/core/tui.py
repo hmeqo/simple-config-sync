@@ -43,11 +43,12 @@ class UOption(Container):
         yield Checkbox("Sync" if self.op.synced else "Unsync", self.op.synced, id="sync")
         with Container(id="content"):
             with Container(id="info"):
-                yield Static(self.op.name, id="name", classes="text-primary")
+                yield Static(self.op.name, id="name", classes="text-orange")
                 if self.op.tags:
-                    yield Static(f"[{', '.join(self.op.tags)}]", id="tags", classes="text-blue")
+                    tags = ", ".join(self.op.tags)
+                    yield Static(f"[ {tags} ]", id="tags", classes="text-orange")
                 yield Static(self.op.status, id="status", classes=self.op.status)
-            yield Static(self.op.description, id="description")
+            yield Static(self.op.description, id="description", classes="text-sky")
             with Container(id="depends"):
                 for i in self.op.depends:
                     depends = ", ".join(self.op.depends[i])
