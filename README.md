@@ -1,6 +1,8 @@
-# simple-config-sync
-
 Used for synchronizing dotfiles across various Linux devices, capable of automatically creating links, automatically deleting links, and selectively synchronizing files.
+
+## Preview
+
+![P](./assets/Screenshot_20240801_232354.png)
 
 ## Install
 
@@ -16,7 +18,7 @@ pip install --user simple-config-sync
 Generate a `config-sync.toml` file.
 
 ```shell
-simpleconfigsync init
+confsync init
 ```
 
 ## Usage
@@ -24,5 +26,5 @@ simpleconfigsync init
 Run the tui program.
 
 ```shell
-simpleconfigsync tui
+confsync tui
 ```

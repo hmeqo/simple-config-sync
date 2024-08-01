@@ -1,14 +1,19 @@
+import importlib.metadata
 from pathlib import Path
 
 import click
 
 import simple_config_sync
 
-CONFIG_SYNC_TEMPLATE = """[options.a]
-group = "default group"
-description = "A config file."
-links = [{ source = "./dotfiles/a", target = "config/a" }]
-depends = { system = ["neovim"], group = ["b"] }
+CONFIG_SYNC_TEMPLATE = """[options.neovim]
+tags = ["Editor"]
+links = [{ source = "dotfiles/a", target = "config/a" }]
+depends = { system = ["neovim"] }
+
+[options.neovide]
+description = "Gui for neovim."
+links = [{ source = "dotfiles/b", target = "config/b" }]
+depends = { system = ["neovide"], item = ["neovim"] }
 """
 
 
@@ -19,7 +24,7 @@ def cli():
 
 @cli.command()
 def version():
-    click.echo(simple_config_sync.__version__)
+    click.echo(importlib.metadata.version("simple_config_sync"))
 
 
 @cli.command()
@@ -29,4 +34,8 @@ def tui():
 
 @cli.command()
 def init():
-    Path("config-sync.toml").write_text(CONFIG_SYNC_TEMPLATE)
+    conf_path = Path("config-sync.toml")
+    if conf_path.exists():
+        click.echo(f"Config file already exists: {conf_path}")
+        return
+    conf_path.write_text(CONFIG_SYNC_TEMPLATE)

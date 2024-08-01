@@ -1,6 +1,6 @@
 [project]
 name = "simple-config-sync"
-version = "0.1.17"
+version = "0.1.18"
 description = "This tool is used to synchronize dotfiles across various Linux devices, with capabilities to automatically create and delete links, as well as selectively synchronize files."
 authors = []
 dependencies = [
@@ -14,8 +14,7 @@ readme = "README.md"
 license = { text = "MIT" }
 
 [project.scripts]
-simpleconfigsync = "simple_config_sync.core:run_cli"
-simpleconfigsync-tui = "simple_config_sync.core:run_tui"
+confsync = "simple_config_sync.core:run_cli"
 
 [build-system]
 requires = ["setuptools", "wheel"]
