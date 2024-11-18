@@ -10,8 +10,7 @@ depends = { system = ["neovide"] }
 
 [options.c]
 description = ""
-links = [{ source = "dotfiles/c", target = "config/c" }]
-
-[options.d]
-description = ""
-links = [{ source = "dotfiles/d", target = "config/d" }]
+links = [
+    { source = "dotfiles/c", target = "config/c" },
+    { source = "dotfiles/d", target = "config/d" },
+]
