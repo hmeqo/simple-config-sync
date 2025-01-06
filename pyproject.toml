@@ -22,9 +22,6 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/simple_config_sync"]
 
-[tool.setuptools.package-data]
-"simple_config_sync.core.assets" = ["*"]
-
 [tool.ruff]
 line-length = 120
 
