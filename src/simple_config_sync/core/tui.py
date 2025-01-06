@@ -2,7 +2,6 @@ import asyncio
 
 from textual import on
 from textual.app import App, ComposeResult
-from textual.binding import Binding
 from textual.containers import Container, Horizontal, VerticalScroll
 from textual.widgets import Button, Checkbox, Footer, Header, Static
 
@@ -150,6 +149,3 @@ class SimpleConfigSyncApp(App):
 
     async def action_focus_up(self):
         self.query_one(UOptionList).focus_up()
-
-    # async def action_choose(self):
-    #     pass
