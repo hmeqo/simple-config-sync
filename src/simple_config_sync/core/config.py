@@ -27,21 +27,23 @@ class Link(OptionProtocol):
         if not self.source.exists():
             raise FileNotFoundError(f"Source file not found: {self.source}")
         self.clean_target()
+        self.backup_target()
         self.target.parent.mkdir(parents=True, exist_ok=True)
         self.target.symlink_to(self.source.resolve(), self.source.is_dir())
 
     def uninstall(self) -> None:
-        if not self.linked and not self.target.is_symlink():
+        if not self.linked:
             return
         self.target.unlink()
         restore(self.target)
 
     def clean_target(self):
-        if not self.target.exists():
-            if self.target.is_symlink():
-                self.target.unlink()
-            return
-        backup(self.target)
+        if not self.target.exists() and self.target.is_symlink():
+            self.target.unlink()
+
+    def backup_target(self):
+        if self.target.exists():
+            backup(self.target)
 
     @property
     def linked(self) -> bool:
@@ -82,6 +84,7 @@ class Option(OptionProtocol):
     def uninstall(self) -> None:
         for link in self.links:
             link.uninstall()
+            link.clean_target()
 
     @property
     def tags(self) -> list[str]:
@@ -127,7 +130,8 @@ class SyncOp(Option, OptionProtocol):
 
     def sync(self) -> None:
         if not self.synced:
-            self.uninstall()
+            if self.lock_op.synced:
+                self.lock_op.uninstall()
             return
         self.lock_op.uninstall()
         self.op.sync()
@@ -181,9 +185,9 @@ class Config:
             toml.dump({"options": {i.name: i.d for i in self.opts if i.op}}, f)
 
     def sync(self) -> None:
-        for op in filter(lambda x: x.status == "deleted", self.opts):
+        for op in filter(lambda x: x.status == "deleted" or not x.synced, self.opts):
             op.sync()
-        for op in filter(lambda x: x.status != "deleted", self.opts):
+        for op in filter(lambda x: x.status != "deleted" and x.synced, self.opts):
             op.sync()
         self.lock()
         self.load()

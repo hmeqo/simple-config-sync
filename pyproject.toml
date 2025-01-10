@@ -1,10 +1,13 @@
 [project]
 name = "simple-config-sync"
-version = "0.1.20"
+version = "0.1.22"
 description = "This tool is used to synchronize dotfiles across various Linux devices, with capabilities to automatically create and delete links, as well as selectively synchronize files."
 readme = "README.md"
+license = { file = "LICENSE" }
 authors = []
 requires-python = ">=3.10"
+keywords = ["config", "dotfiles"]
+classifiers = ["Programming Language :: Python"]
 dependencies = [
     "textual>=0.52.1",
     "toml>=0.10.2",
@@ -14,6 +17,13 @@ dependencies = [
 
 [project.scripts]
 confsync = "simple_config_sync.core:run_cli"
+
+[project.urls]
+# Homepage = "https://example.com"
+# Documentation = "https://readthedocs.org"
+Repository = "https://github.com/hmeqo/simple-config-sync.git"
+Issues = "https://github.com/hmeqo/simple-config-sync/issues"
+# Changelog = "https://github.com/hmeqo/simple-config-sync/blob/master/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]

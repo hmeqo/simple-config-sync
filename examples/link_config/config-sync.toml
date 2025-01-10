@@ -3,6 +3,11 @@ tags = ["editor"]
 links = [{ source = "dotfiles/a", target = "config/a" }]
 depends = { system = ["neovim"] }
 
+[options.neovim-2]
+tags = ["editor"]
+links = [{ source = "dotfiles/a", target = "config/a" }]
+depends = { system = ["neovim"] }
+
 [options.neovide]
 description = "Gui for neovim."
 links = [{ source = "dotfiles/b", target = "config/b" }]
