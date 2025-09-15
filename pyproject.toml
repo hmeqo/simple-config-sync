@@ -1,11 +1,11 @@
 [project]
 name = "simple-config-sync"
-version = "0.1.22"
+version = "0.1.24"
 description = "This tool is used to synchronize dotfiles across various Linux devices, with capabilities to automatically create and delete links, as well as selectively synchronize files."
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = []
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["config", "dotfiles"]
 classifiers = ["Programming Language :: Python"]
 dependencies = [
